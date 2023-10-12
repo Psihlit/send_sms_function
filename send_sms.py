@@ -54,7 +54,7 @@ def adapted_division_into_sms(input_text, size_of_sms, possible_count_of_sms):
     words_in_sms = input_text.split(" ")
     # флаг для завершения сообщения
     end_point_find = True
-    # список для результатов
+    # список для результатов ("start_0" идет как заглушка, чтобы правильно считать длину списка)
     result_sms = ["start_0"]
     # строка результата
     result_string = ""
@@ -164,12 +164,14 @@ def send_sms(text: str, size_of_sms: int):
     text = temp_text
     size_of_sms = temp_size
 
-    # если оно выходит больше, чем [n/m], берем максимальное значение из этих двух чисел
-    if len(message_count_string) >= 6:
+    # если в итоговом списке сообщений больше, чем предполагалось, устанавливаем итоговое количество сообщений,
+    # равным большему значению
+    if numbers[0] > numbers[1]:
         final_count_of_messages = max(numbers)
         result_sms = adapted_division_into_sms(text, size_of_sms, final_count_of_messages)
-    # иначе берем минимальное значение из этих двух чисел
-    else:
+    # если в итоговом списке сообщений меньше, чем предполагалось, устанавливаем итоговое количество сообщений,
+    # равным меньшему значению
+    elif numbers[0] < numbers[1]:
         final_count_of_messages = min(numbers)
         result_sms = adapted_division_into_sms(text, size_of_sms, final_count_of_messages)
 
@@ -177,10 +179,19 @@ def send_sms(text: str, size_of_sms: int):
     return result_sms[1:]
 
 
-test2 = ""
+# проверки
 test1 = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Hac habitasse platea dictumst vestibulum rhoncus est pellentesque. Dolor purus non enim praesent elementum facilisis leo vel fringilla. Scelerisque mauris pellentesque pulvinar pellentesque habitant morbi tristique senectus et. Lorem ipsum dolor sit amet consectetur."
 print(send_sms(test1, 25))
 print(send_sms(test1, 50))
 print(send_sms(test1, 100))
 print(send_sms(test1, 150))
 print(send_sms(test1, 400))
+
+print("*" * 20)
+
+test2 = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Id cursus metus aliquam eleifend mi in nulla posuere. Placerat in egestas erat imperdiet sed. Non pulvinar neque laoreet suspendisse interdum consectetur libero id faucibus. Facilisis sed odio morbi quis commodo. Tincidunt nunc pulvinar sapien et ligula. Amet consectetur adipiscing elit duis tristique sollicitudin nibh sit."
+print(send_sms(test2, 25))
+print(send_sms(test2, 50))
+print(send_sms(test2, 100))
+print(send_sms(test2, 150))
+print(send_sms(test2, 400))
